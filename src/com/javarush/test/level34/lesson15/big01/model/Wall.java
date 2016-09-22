@@ -13,6 +13,6 @@ public class Wall extends CollisionObject {
     @Override
     public void draw(Graphics graphics) {
         graphics.setColor(Color.ORANGE);
-        graphics.fillRect(x,y,width,height);
+        graphics.fillRect(x-width/2,y-height/2,width,height);
     }
 }

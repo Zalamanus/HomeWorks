@@ -12,11 +12,10 @@ public class Box extends CollisionObject implements Movable {
 
     @Override
     public void draw(Graphics graphics) {
-        int size = Model.FIELD_SELL_SIZE;
         graphics.setColor(Color.YELLOW);
-        graphics.drawRect(x,y,width,height);
-        graphics.drawLine(x,y,x+size,y+size);
-        graphics.drawLine(x,y+size,x+size,y);
+        graphics.drawRect(x-width/2,y-height/2,width,height);
+        graphics.drawLine(x-width/2,y-height/2,x+width/2,y+height/2);
+        graphics.drawLine(x-width/2,y+height/2,x+width/2,y-height/2);
     }
 
     @Override

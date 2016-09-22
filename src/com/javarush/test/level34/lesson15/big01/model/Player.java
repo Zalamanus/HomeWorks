@@ -14,12 +14,23 @@ public class Player extends CollisionObject implements Movable {
     @Override
     public void draw(Graphics graphics) {
         graphics.setColor(Color.RED);
-        graphics.fillOval(x,y,width,height);
+        graphics.fillOval(x-width/2,y-height/2,width,height);
     }
 
     @Override
     public void move(int x, int y) {
-        setX(this.x+x);
-        setY(this.y+y);
+/*        int step = 5;
+        for (int i = 0; i < 5; i++) {
+            setX(this.x + x/step);
+            setY(this.y + y/step);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }*/
+        setX(this.x + x);
+        setY(this.y + y);
     }
+    // todo сделать метод move(direction), чтобы плавно двигал игрока.
 }
