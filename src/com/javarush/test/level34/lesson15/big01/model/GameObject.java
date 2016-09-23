@@ -13,6 +13,8 @@ public abstract class GameObject {
 
     public abstract void draw(Graphics graphics);
 
+    public abstract void draw(Graphics graphics, Color color);
+
     public GameObject(int x, int y) {
         this.x = x;
         this.y = y;

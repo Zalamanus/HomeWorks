@@ -10,4 +10,7 @@ public interface EventListener {
     void restart(); //начать заново текущий уровень.
     void startNextLevel(); //начать следующий уровень.
     void levelCompleted(int level); //уровень с номером level завершён.
+    void setNewTitle(String s); //установка нового заголовка окна
+    void setNewSize(int width, int height);
+    void selectLevel();
 }

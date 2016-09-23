@@ -11,12 +11,19 @@ public class GameObjects {
     Set<Box> boxes;
     Set<Home> homes;
     Player player;
+    int widthCell;
+    int heightCell;
+    int level;
 
-    public GameObjects(Set<Wall> walls, Set<Box> boxes, Set<Home> homes, Player player) {
+    public GameObjects(Set<Wall> walls, Set<Box> boxes, Set<Home> homes, Player player, int widthCell, int heightCell,int level) {
         this.walls = walls;
         this.boxes = boxes;
         this.homes = homes;
         this.player = player;
+        this.widthCell = widthCell;
+        this.heightCell = heightCell;
+        this.level = level;
+
     }
     public Set<GameObject> getAll() {
         Set<GameObject> set = new HashSet<>();
@@ -25,6 +32,14 @@ public class GameObjects {
         set.addAll(homes);
         set.add(player);
         return set;
+    }
+
+    public int getWidthCell() {
+        return widthCell;
+    }
+
+    public int getHeightCell() {
+        return heightCell;
     }
 
     public Set<Wall> getWalls() {

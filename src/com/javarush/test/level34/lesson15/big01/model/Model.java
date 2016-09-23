@@ -8,11 +8,11 @@ import java.nio.file.Paths;
  * Created by MVTitov on 22.09.2016.
  */
 public class Model {
-    public static final int FIELD_SELL_SIZE = 20;
+    public static final int FIELD_SELL_SIZE = 30;
     private EventListener eventListener;
-    private GameObjects gameObjects;
+    private LevelLoader levelLoader = new LevelLoader(Paths.get("C:\\Users\\MVTitov\\Documents\\JavaRushHomeWork\\src\\com\\javarush\\test\\level34\\lesson15\\big01\\res\\levels.txt"));
     private int currentLevel = 1;
-    private LevelLoader levelLoader = new LevelLoader(Paths.get("\\src\\com\\javarush\\test\\level34\\lesson15\\big01\\res\\levels.txt"));
+    private GameObjects gameObjects = levelLoader.getLevel(currentLevel);
 
     public void setEventListener(EventListener eventListener) {
         this.eventListener = eventListener;
@@ -23,7 +23,10 @@ public class Model {
     }
 
     public void restartLevel(int level) {
+        currentLevel = level;
         gameObjects = levelLoader.getLevel(level);
+        eventListener.setNewSize((gameObjects.getWidthCell())*FIELD_SELL_SIZE+16,(gameObjects.getHeightCell())*FIELD_SELL_SIZE+38);
+        eventListener.setNewTitle("Уровень "+gameObjects.level);
     }
 
     public void restart() {

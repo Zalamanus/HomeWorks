@@ -3,6 +3,7 @@ package com.javarush.test.level34.lesson15.big01.controller;
 import com.javarush.test.level34.lesson15.big01.model.Direction;
 import com.javarush.test.level34.lesson15.big01.model.GameObjects;
 import com.javarush.test.level34.lesson15.big01.model.Model;
+import com.javarush.test.level34.lesson15.big01.view.Field;
 import com.javarush.test.level34.lesson15.big01.view.View;
 
 /**
@@ -20,14 +21,34 @@ public class Controller implements EventListener {
         view = new View(this);
         model = new Model();
         view.init();
-        model.restart();
         model.setEventListener(this);
         view.setEventListener(this);
+        model.restart();
+    }
+
+    public Field getField() {
+        return view.getField();
     }
 
     @Override
     public void move(Direction direction) {
         model.move(direction);
+        view.update();
+    }
+
+    public void setNewTitle(String s) {
+        view.setNewTitle(s);
+    }
+
+    @Override
+    public void setNewSize(int width, int height) {
+        view.setSize(width,height);
+    }
+
+    @Override
+    public void selectLevel() {
+        int level = view.selectLevel();
+        if (level != -1) model.restartLevel(level);
         view.update();
     }
 

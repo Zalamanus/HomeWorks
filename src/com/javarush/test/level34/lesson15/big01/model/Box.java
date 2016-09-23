@@ -1,5 +1,7 @@
 package com.javarush.test.level34.lesson15.big01.model;
 
+import com.javarush.test.level34.lesson15.big01.view.Field;
+
 import java.awt.*;
 
 /**
@@ -16,6 +18,11 @@ public class Box extends CollisionObject implements Movable {
         graphics.drawRect(x-width/2,y-height/2,width,height);
         graphics.drawLine(x-width/2,y-height/2,x+width/2,y+height/2);
         graphics.drawLine(x-width/2,y+height/2,x+width/2,y-height/2);
+    }
+
+    @Override
+    public void draw(Graphics graphics, Color color) {
+
     }
 
     @Override

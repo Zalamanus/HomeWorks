@@ -3,12 +3,12 @@ package com.javarush.test.level34.lesson15.big01.view;
 
 import com.javarush.test.level34.lesson15.big01.controller.EventListener;
 import com.javarush.test.level34.lesson15.big01.model.*;
-import com.javarush.test.level34.lesson15.big01.model.Box;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Set;
 
 
 /**
@@ -26,13 +26,10 @@ public class Field extends JPanel {
     }
 
     public void paint(Graphics g) {
-        //new Box(20,20).draw(g);
-        //new Player(40,40).draw(g);
-        //new Home(60,60).draw(g);
-        //new Wall(80,80).draw(g);
         g.setColor(Color.black);
         g.fillRect(0, 0, view.getWidth(), view.getHeight());
-        for (GameObject gameObject : view.getGameObjects().getAll()) {
+        Set<GameObject> gameObjectsSet = view.getGameObjects().getAll();
+        for (GameObject gameObject : gameObjectsSet) {
             gameObject.draw(g);
         }
     }
@@ -43,6 +40,7 @@ public class Field extends JPanel {
 
     public static class KeyHandler extends KeyAdapter {
         Field field;
+
         public KeyHandler(Field field) {
             this.field = field;
         }
@@ -64,6 +62,9 @@ public class Field extends JPanel {
                     break;
                 case KeyEvent.VK_R:
                     field.eventListener.restart();
+                    break;
+                case KeyEvent.VK_L:
+                    field.eventListener.selectLevel();
                     break;
             }
         }

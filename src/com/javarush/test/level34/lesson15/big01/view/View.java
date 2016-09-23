@@ -5,6 +5,7 @@ import com.javarush.test.level34.lesson15.big01.controller.EventListener;
 import com.javarush.test.level34.lesson15.big01.model.GameObjects;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class View extends JFrame {
     private Controller controller;
@@ -14,6 +15,10 @@ public class View extends JFrame {
         this.controller = controller;
     }
 
+    public Field getField() {
+        return field;
+    }
+
     public void init() {
         field = new Field(this);
         add(field);
@@ -21,8 +26,12 @@ public class View extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(500, 500);
         setLocationRelativeTo(null);
-        setTitle("Сокобан");
+        setTitle("Сокобан.");
         setVisible(true);
+    }
+
+    public void setNewTitle(String s) {
+        setTitle("Сокобан. "+s);
     }
 
     public void setEventListener(EventListener eventListener) {
@@ -38,5 +47,14 @@ public class View extends JFrame {
         update();
         JOptionPane.showMessageDialog(this, "Уровень " + level + " пройден!");
         controller.startNextLevel();
+    }
+
+    public int selectLevel() {
+        int level = -1;
+        try {
+            level = Integer.parseInt(JOptionPane.showInputDialog("Введите номер уровня:"));
+        } catch (Exception e) {
+        }
+        return level;
     }
 }
