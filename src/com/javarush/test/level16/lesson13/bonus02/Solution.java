@@ -20,91 +20,75 @@ import java.util.List;
 
 public class Solution {
     public static List<Thread> threads = new ArrayList<Thread>(5);
-
     static {
-        threads.add(new Thread(new Infinity()));
-        threads.add(new Thread(new Interrupt()));
-        threads.add(new Thread(new Wow()));
-        threads.add(new Thread(new Msg()));
-        threads.add(new Thread(new Reader()));
+        threads.add(new Infinity());
+        threads.add(new IE());
+        threads.add(new Ura());
+        threads.add(new Mess());
+        threads.add(new Summ());
     }
-
-/*
-    public static void main(String[] args) {
-        threads.get(1).start();
-        threads.get(1).interrupt();
-    }
-*/
-
-    public static class Infinity implements Runnable {
-
+    public static class Infinity extends Thread {
         @Override
         public void run() {
-            while (true) {
-            }
+            while (true) {}
         }
     }
-
-    public static class Interrupt implements Runnable {
-
+    public static class IE extends Thread {
         @Override
         public void run() {
             try {
-                Thread.sleep(10000);
+                while (true) {
+                    Thread.sleep(5000);
+                }
             } catch (InterruptedException e) {
                 System.out.println("InterruptedException");
             }
         }
     }
-
-    public static class Wow implements Runnable {
-
+    public static class Ura extends Thread {
         @Override
         public void run() {
-            while (true) {
-                System.out.println("Ура");
-                try {
+            try {
+                while (true) {
+                    System.out.println("Ура");
                     Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+            } catch (InterruptedException e) {
             }
         }
-
     }
-
-    public static class Msg implements Runnable, Message {
-        public boolean isCancel = false;
+    public static class Mess extends Thread implements Message {
 
         @Override
         public void showWarning() {
-            isCancel = true;
+            try {
+                this.interrupt();
+                this.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         public void run() {
-            while (!isCancel) {
-            }
+            while (!isInterrupted()) {}
         }
     }
-
-    public static class Reader implements Runnable {
-
+    public static class Summ extends Thread {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String s;
+        int sum=0;
         @Override
         public void run() {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String s = "";
-            int result = 0;
-            while (true) {
-                try {
-                    s = reader.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            try {
+                while (!(s = reader.readLine()).equals("N")) {
+                    sum += Integer.parseInt(s);
                 }
-                if (s.equals("N")) break;
-                result += Integer.parseInt(s);
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            System.out.println(result);
+            System.out.println(sum);
         }
     }
 }

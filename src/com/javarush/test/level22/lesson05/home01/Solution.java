@@ -40,6 +40,12 @@ public class Solution {
     }
 
     public String getPartOfString(String string, String threadName) {
-        return null;
+        try {
+            return string.substring(string.indexOf("\t")+1,string.lastIndexOf("\t"));
+        } catch (Exception e) {
+            if (FIRST_THREAD_NAME.equals(threadName)) throw new TooShortStringFirstThreadException(e);
+            if (SECOND_THREAD_NAME.equals(threadName)) throw new TooShortStringSecondThreadException(e);
+            Exception f = new RuntimeException();
+            throw new RuntimeException(e);        }
     }
 }

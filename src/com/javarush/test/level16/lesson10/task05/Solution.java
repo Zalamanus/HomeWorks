@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Solution {
     public static byte countThreads = 3;
-    static List<Thread> threads = new ArrayList<>(countThreads);
+    static List<Thread> threads = new ArrayList<Thread>(countThreads);
 
     public static void main(String[] args) throws InterruptedException {
         initThreadsAndStart();
@@ -24,7 +24,9 @@ public class Solution {
     }
 
     public static void ourInterruptMethod() {
-        //add your code here - добавь код тут
+        for (Thread thread : threads) {
+            thread.interrupt();
+        }
     }
 
     private static void initThreadsAndStart() {
@@ -41,14 +43,15 @@ public class Solution {
     public static class Water implements Runnable {
         private String commonResource;
 
+
         public Water(String commonResource) {
             this.commonResource = commonResource;
         }
 
         public void run() {
             //fix 2 variables - исправь 2 переменных
-            boolean isCurrentThreadInterrupted = false;
-            String threadName = "";
+            boolean isCurrentThreadInterrupted = Thread.currentThread().isInterrupted();
+            String threadName = Thread.currentThread().getName();
 
             try {
                 while (!isCurrentThreadInterrupted) {

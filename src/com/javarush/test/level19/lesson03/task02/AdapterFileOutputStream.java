@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class AdapterFileOutputStream implements AmigoStringWriter {
-    FileOutputStream os;
+    private FileOutputStream os;
 
     public AdapterFileOutputStream(FileOutputStream os) {
         this.os = os;
@@ -17,11 +17,15 @@ public class AdapterFileOutputStream implements AmigoStringWriter {
     @Override
     public void flush() throws IOException {
         os.flush();
+
     }
 
     @Override
     public void writeString(String s) throws IOException {
-        os.write(s.getBytes());
+        char[] arr = s.toCharArray();
+        for (char c : arr) {
+            os.write((int) c);
+        }
     }
 
     @Override

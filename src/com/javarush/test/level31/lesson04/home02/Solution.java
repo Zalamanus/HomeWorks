@@ -1,5 +1,6 @@
 package com.javarush.test.level31.lesson04.home02;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -16,6 +17,18 @@ D:/mydir/BCD.zip
 Метод main не участвует в тестировании
 */
 public class Solution extends SimpleFileVisitor<Path> {
+    @Override
+    public FileVisitResult visitFile(Path path, BasicFileAttributes basicFileAttributes) throws IOException {
+        if (path.toString().toLowerCase().endsWith(".zip") || path.toString().toLowerCase().endsWith(".rar")) archived.add(path.toString());
+        return super.visitFile(path, basicFileAttributes);
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path path, IOException e) throws IOException {
+        failed.add(path.toString());
+        return FileVisitResult.SKIP_SUBTREE;
+    }
+
     public static void main(String[] args) throws IOException {
         EnumSet<FileVisitOption> options = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
         final Solution solution = new Solution();
@@ -43,17 +56,5 @@ public class Solution extends SimpleFileVisitor<Path> {
 
     public List<String> getFailed() {
         return failed;
-    }
-    @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        if (file.getFileName().endsWith("txt"))
-            archived.add(file.toString());
-        return super.visitFile(file, attrs);
-    }
-
-    @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-        failed.add(file.toString());
-        return FileVisitResult.SKIP_SUBTREE;
     }
 }
