@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class Model {
     public static final int FIELD_SELL_SIZE = 30;
     private EventListener eventListener;
-    private LevelLoader levelLoader = new LevelLoader(Paths.get("C:\\Users\\MVTitov\\Documents\\JavaRushHomeWork\\src\\com\\javarush\\test\\level34\\lesson15\\big01\\res\\levels.txt"));
+    private LevelLoader levelLoader = new LevelLoader(Paths.get("C:\\Users\\MVTitov\\JavaRushHomeWork\\src\\com\\javarush\\test\\level34\\lesson15\\big01\\res\\levels.txt"));
     private int currentLevel = 1;
     private GameObjects gameObjects = levelLoader.getLevel(currentLevel);
 
