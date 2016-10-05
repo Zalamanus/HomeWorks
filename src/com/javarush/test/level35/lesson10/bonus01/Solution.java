@@ -1,7 +1,8 @@
 package com.javarush.test.level35.lesson10.bonus01;
 
 import java.io.*;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,83 +20,91 @@ import java.util.Set;
 */
 public class Solution {
     public static void main(String[] args) {
-        Set<? extends Animal> allAnimals = getAllAnimals("C:\\Classes");
+        //Set<? extends Animal> allAnimals = getAllAnimals("C:/Classes");
+        Set<? extends Animal> allAnimals = getAllAnimals("C:\\Users\\MVTitov\\JavaRushHomeWork\\out\\production\\JavaRushHomeWork");
         System.out.println(allAnimals);
     }
 
-    public static <T extends Animal> Set<T> getAllAnimals(String pathToAnimals) {
-        Set<T> animalSet = new HashSet<>();
+    public static Set<? extends Animal> getAllAnimals(String pathToAnimals) {
+        Set<Animal> animalSet = new HashSet<>();
+        String rootDir;
+        if (pathToAnimals.endsWith("\\") || pathToAnimals.endsWith("/"))
+            rootDir = pathToAnimals;
+        else rootDir = pathToAnimals + "/";
 
-        String rootDir = pathToAnimals;
-
-        File root = new File(rootDir);
-        File[] files = root.listFiles();
         List<String> classFiles = new ArrayList<>();
-        int i = 0;
-
-        while (i < files.length) {
-            File firstElement = files[i];
-            File[] subFiles = null;
-
-            if (firstElement.isDirectory()) {
-                subFiles = firstElement.listFiles();
-            } else {
-                i++;
-                continue;
-            }
-            File[] temp = new File[files.length + subFiles.length];
-            for (int j = 0; j <= i; j++)
-                temp[j] = files[j];
-            for (int k = 0; k < subFiles.length; k++)
-                temp[i + 1 + k] = subFiles[k];
-            for (int m = i + 1; m < files.length; m++)
-                temp[m + subFiles.length] = files[m];
-
-            files = temp;
-            i++;
+        Path pathSource = Paths.get(rootDir);
+        try {
+            Files.walkFileTree(pathSource, new MyFileVisitor(classFiles));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        for (File file : files) {
-            if (!file.isDirectory() && file.getName().endsWith(".class")) classFiles.add(file.getAbsolutePath());
-        }
-
-        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        ClassLoader loader = new FileClassLoader(ClassLoader.getSystemClassLoader(), rootDir);
 
 
         for (String classFile : classFiles) {
 
             String s = Paths.get(pathToAnimals).relativize(Paths.get(classFile)).toString();
-            s = s.substring(0,s.length()-6);
-            s = s.replaceAll("\\\\",".");
+            s = s.substring(0, s.length() - 6);
+            s = s.replaceAll("\\\\", ".");
 
             String className = s;
 
             try {
                 Class clazz = loader.loadClass(className);
                 for (Class aClass : clazz.getInterfaces()) {
-                    if (aClass.getSimpleName().equals("Animal")) {
-                        animalSet.add((T) clazz.newInstance());
+                    if (aClass.equals(Animal.class)) {
+                        animalSet.add((Animal) clazz.newInstance());
                     }
                 }
             } catch (Exception e) {
             }
         }
-
-
-
-
         return animalSet;
     }
 
-/*
-    public static class ModuleLoader extends ClassLoader {
-*/
-/*
-        public ModuleLoader(String pathtobin, ClassLoader parent) {
+    static class FileClassLoader extends ClassLoader {
+        String rootDir;
+
+        public FileClassLoader(ClassLoader parent, String rootDir) {
             super(parent);
+            this.rootDir = rootDir;
         }
-*/
+
+        public Class findClass(String name) {
+            byte[] b = loadClassData(name);
+            name = name.replaceAll("\\\\", ".");
+            return defineClass(name, b, 0, b.length);
+        }
+
+        private byte[] loadClassData(String name) {
+            name = name.replaceAll("\\.", "\\\\");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                Files.copy(Paths.get(rootDir + name + ".class"), baos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return baos.toByteArray();
+        }
+
+    }
+
+    static class MyFileVisitor extends SimpleFileVisitor<Path> {
+        List<String> classFiles;
+
+        public MyFileVisitor(List<String> classFiles) {
+            this.classFiles = classFiles;
+        }
 
 
+        public FileVisitResult visitFile(Path path,
+                                         BasicFileAttributes fileAttributes) {
+            if (path.getFileName().toString().endsWith(".class"))
+                classFiles.add(path.toString());
+            return FileVisitResult.CONTINUE;
+        }
 
+    }
 }
