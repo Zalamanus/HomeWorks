@@ -25,13 +25,10 @@ public class View extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(500, 500);
         setLocationRelativeTo(null);
-        setTitle("Сокобан.");
+        setTitle("Пятнашки");
         setVisible(true);
     }
 
-    public void setNewTitle(String s) {
-        setTitle("Сокобан. "+s);
-    }
 
     public void setEventListener(EventListener eventListener) {
         field.setEventListener(eventListener);
@@ -42,9 +39,9 @@ public class View extends JFrame {
     public GameObjects getGameObjects() {
         return controller.getGameObjects();
     }
-    public void completed(int level) {
+    public void completed() {
         update();
-        JOptionPane.showMessageDialog(this, "Уровень " + level + " пройден!");
+        JOptionPane.showMessageDialog(this, "Уровень пройден!");
         controller.restart();
     }
 

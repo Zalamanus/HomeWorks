@@ -8,7 +8,6 @@ import com.javarush.test.fifteen.model.Direction;
 public interface EventListener {
     void move(Direction direction); //передвинуть объект в определенном направлении.
     void restart(); //начать заново текущий уровень.
-    void levelCompleted(int level); //уровень с номером level завершён.
-    void setNewTitle(String s); //установка нового заголовка окна
+    void levelCompleted(); //уровень с номером level завершён.
     void setNewSize(int width, int height);
 }

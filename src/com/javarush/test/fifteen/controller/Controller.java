@@ -36,9 +36,6 @@ public class Controller implements EventListener {
         view.update();
     }
 
-    public void setNewTitle(String s) {
-        view.setNewTitle(s);
-    }
 
     @Override
     public void setNewSize(int width, int height) {
@@ -53,8 +50,8 @@ public class Controller implements EventListener {
     }
 
     @Override
-    public void levelCompleted(int level) {
-        view.completed(level);
+    public void levelCompleted() {
+        view.completed();
     }
 
     public GameObjects getGameObjects() {

@@ -8,6 +8,7 @@ import java.awt.*;
 public class Box extends CollisionObject implements Movable {
     private int number;
     private char[] num2print;
+
     public Box(int x, int y, int number) {
         super(x, y);
         this.number = number;
@@ -16,9 +17,14 @@ public class Box extends CollisionObject implements Movable {
 
     @Override
     public void draw(Graphics graphics) {
-            graphics.setColor(Color.YELLOW);
-            graphics.drawRect(x + 1 - width / 2, y + 1 - height / 2, width - 2, height - 2);
-            graphics.drawChars(num2print, 0, num2print.length, x - width / 5, y);
+        graphics.setColor(Color.GRAY);
+        graphics.fillRect(x + 1 - width / 2, y + 1 - height / 2, width - 2, height - 2);
+        graphics.setColor(Color.YELLOW);
+        graphics.drawRect(x + 1 - width / 2, y + 1 - height / 2, width - 2, height - 2);
+        graphics.setFont(new Font("Monospaced", Font.CENTER_BASELINE, (int) (50/1.8d)));
+        int offset = 2;
+        if (num2print.length == 1) offset = 9;
+        graphics.drawChars(num2print, 0, num2print.length, x - width / 3 + offset, y+8);
     }
 
     @Override
@@ -29,8 +35,8 @@ public class Box extends CollisionObject implements Movable {
 
     @Override
     public void move(int x, int y) {
-        setX(this.x+x);
-        setY(this.y+y);
+        setX(this.x + x);
+        setY(this.y + y);
     }
 
     @Override

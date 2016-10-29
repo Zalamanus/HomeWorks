@@ -2,19 +2,17 @@ package com.javarush.test.fifteen.model;
 
 import com.javarush.test.fifteen.controller.EventListener;
 
-import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by MVTitov on 22.09.2016.
  */
 public class Model {
-    public static final int FIELD_SELL_SIZE = 30;
+    public static final int FIELD_SELL_SIZE = 50;
     private EventListener eventListener;
-    private LevelLoader levelLoader = new LevelLoader(Paths.get("C:\\Users\\MVTitov\\JavaRushHomeWork\\src\\com\\javarush\\test\\fifteen\\res\\levels.txt"));
-    private int currentLevel = 1;
-    private GameObjects gameObjects = levelLoader.getLevel(currentLevel);
+    private LevelLoader levelLoader = new LevelLoader();
+    private GameObjects gameObjects = levelLoader.getLevel();
 
     public void setEventListener(EventListener eventListener) {
         this.eventListener = eventListener;
@@ -24,15 +22,13 @@ public class Model {
         return gameObjects;
     }
 
-    public void restartLevel(int level) {
-        currentLevel = level;
-        gameObjects = levelLoader.getLevel(level);
-        eventListener.setNewSize((gameObjects.getWidthCell())*FIELD_SELL_SIZE+16,(gameObjects.getHeightCell())*FIELD_SELL_SIZE+38);
-        eventListener.setNewTitle("Уровень "+gameObjects.level);
+    public void restartLevel() {
+        gameObjects = levelLoader.getLevel();
+        eventListener.setNewSize((gameObjects.getWidthCell())*FIELD_SELL_SIZE+9,(gameObjects.getHeightCell())*FIELD_SELL_SIZE+28);
     }
 
     public void restart() {
-        restartLevel(currentLevel);
+        restartLevel();
     }
 
     public void move(Direction direction) {
@@ -45,18 +41,22 @@ public class Model {
                 case UP:
                     box.move(0, -FIELD_SELL_SIZE);
                     nullBox.move(0, FIELD_SELL_SIZE);
+                    Collections.swap(boxes, boxes.indexOf(box), boxes.indexOf(nullBox));
                     break;
                 case DOWN:
                     box.move(0, FIELD_SELL_SIZE);
                     nullBox.move(0, -FIELD_SELL_SIZE);
+                    Collections.swap(boxes, boxes.indexOf(box), boxes.indexOf(nullBox));
                     break;
                 case LEFT:
                     box.move(-FIELD_SELL_SIZE, 0);
                     nullBox.move(FIELD_SELL_SIZE,0);
+                    Collections.swap(boxes, boxes.indexOf(box), boxes.indexOf(nullBox));
                     break;
                 case RIGHT:
                     box.move(FIELD_SELL_SIZE, 0);
                     nullBox.move(-FIELD_SELL_SIZE,0);
+                    Collections.swap(boxes, boxes.indexOf(box), boxes.indexOf(nullBox));
                     break;
             }
             break;
@@ -66,12 +66,10 @@ public class Model {
         checkCompletion();
     }
 
+
+
     public boolean checkCollision(CollisionObject gameObject, Direction direction) {
-        for (Wall wall : gameObjects.getWalls()) {
-            if (gameObject.isCollision(wall, direction)) {
-                return true;
-            }
-        }
+        if (gameObject.isOutOfField(direction)) return true;
         for (Box box : gameObjects.getBoxes()) {
             if (box instanceof NullBox) continue;
             if (gameObject.isCollision(box,direction)) {
@@ -82,20 +80,13 @@ public class Model {
     }
 
     public void checkCompletion() {
-/*        // проверяем все ли дома заняты ящиками
-        boolean allBusy = true; // предполагаем что все занято
-        for (Home home : gameObjects.getHomes()) { // ищем для дома ящик
-            boolean isBusy = false;
-            for (Box box : gameObjects.getBoxes()) {
-                if (home.x == box.x && home.y == box.y) {
-                    isBusy = true; //ящик для дома есть
-                    break; // переходим к следующему дому
-                }
-            }
-            if (!isBusy) allBusy = false; // ящика для дома нет, значит не все занято.
+        List<Box> boxList = gameObjects.getBoxes();
+        for (Box box : boxList) {
+            if (boxList.indexOf(box)+1 != box.getNumber()) return;
         }
-        if (allBusy) // все дома заняты, завершаем уровень.
-            eventListener.levelCompleted(currentLevel);*/
+        eventListener.levelCompleted();
+
+
     }
 
 }
