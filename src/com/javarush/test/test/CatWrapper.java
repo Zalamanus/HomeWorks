@@ -35,16 +35,13 @@ public class CatWrapper extends Cat {
     }
 
     public static void main(String[] args) {
-        Pattern patt = Pattern.compile("<b>([^<]*)</b>");
-        String htmlString = "lkj <b> wewee</b> uhb <b> xcv </b>";
-        Matcher m = patt.matcher(htmlString);
-        StringBuffer sb = new StringBuffer(htmlString.length());
-        while (m.find()) {
-            String text = m.group(1);
-            m.appendReplacement(sb, Matcher.quoteReplacement(text));
-        }
-        m.appendTail(sb);
-        System.out.println(sb.toString());
+      int a = 1;
+        int b = 2;
+        int c =3;
+        int d =4;
+        System.out.printf("%d %d %d %d\n",a,b,c,d);
+        a=d=c=b;
+        System.out.printf("%d %d %d %d\n",a,b,c,d);
 
     }
 
